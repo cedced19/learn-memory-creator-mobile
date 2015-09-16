@@ -2,24 +2,40 @@
 <html>
 <head>
     <meta charset="utf-8" />
-
-    <!--
-        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
-        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
-    -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
-    <title>learnmemorycreatormobile</title>
-
-    <!-- learnmemorycreatormobile references -->
-    <link href="css/index.css" rel="stylesheet" />
+    <title>Learn Memory Mobile</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
-    <p>Hello, your application is ready!</p>
+    <div class="site-container" ng-app="LearnMemory" ng-swipe-right="hideMenu()" ng-swipe-left="showMenu()">
+        <div class="site-pusher">
+            <header class="header">
+                <a class="header-icon" ng-hide="nav == 'home'" ng-click="showMenu()"></a>
+                <nav class="menu" ng-hide="init">
+                    <a ng-click="hideMenu('download')" ng-class="{active: nav == 'download'}"><i class="glyphicon glyphicon-floppy-save"></i> Download lessons</a>
+                    <a ng-click="hideMenu('offline')" ng-class="{active: nav == 'offline'}"><i class="glyphicon glyphicon-floppy-disk"></i> Offline lessons</a>
+                    <a ng-click="hideMenu('config')" ng-class="{active: nav == 'config'}"><i class="glyphicon glyphicon-cog"></i> Configuration</a>
+                </nav>
+                <span class="header-logo">Learn Memory</span>
+                <a class="header-download glyphicon glyphicon-cloud-download" ng-show="download" ng-click="download()"></a>
+            </header>
 
-    <!-- Cordova reference, this is added to your app when it's built. -->
+            <div class="site-content">
+                <div class="container" autoscroll="true" ng-view></div>
+            </div>
+
+            <div class="site-cache" ng-click="hideMenu()"></div>
+        </div>
+    </div>
+
+
     <script src="cordova.js"></script>
-    <script src="scripts/platformOverrides.js"></script>
 
-    <script src="scripts/index.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-routes.min.js"></script>
+    <script src="js/angular-storage.min.js"></script>
+    <script src="js/angular-touch.min.js"></script>
+    <script src="js/angular-sanitize.min.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
