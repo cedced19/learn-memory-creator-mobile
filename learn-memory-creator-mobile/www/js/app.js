@@ -6,7 +6,7 @@
         controller: 'LearnMemoryHomeCtrl'
     })
     .when('/create', {
-        templateUrl: 'views/form.html',
+        templateUrl: 'views/creation-form.html',
         controller: 'LearnMemoryCreateCtrl'
     })
     .when('/update', {
@@ -14,7 +14,7 @@
         controller: 'LearnMemoryUpdateCtrl'
     })
     .when('/update/:id', {
-        templateUrl: 'views/form.html',
+        templateUrl: 'views/update-form.html',
         controller: 'LearnMemoryUpdateItemCtrl'
     })
     .when('/config', {
@@ -58,6 +58,11 @@
     }
 }).controller('LearnMemoryCreateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
     $anchorScroll();
+    
+    document.querySelector('textarea').addEventListener('keyup', function (e) {
+        this.style.height = '24px';
+        this.style.height = this.scrollHeight + 12 + 'px';
+    });
 
     $rootScope.nav = 'create';
 }).controller('LearnMemoryUpdateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
@@ -66,6 +71,11 @@
     $rootScope.nav = 'update';
 }).controller('LearnMemoryUpdateItemCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $routeParams, $anchorScroll) {
     $anchorScroll();
+
+    document.querySelector('textarea').addEventListener('keyup', function (e) {
+        this.style.height = '24px';
+        this.style.height = this.scrollHeight + 12 + 'px';
+    });
 
     $rootScope.nav = false;
 }).controller('LearnMemoryConfigCtrl', function ($scope, $rootScope, $location, $localStorage, $anchorScroll) {
