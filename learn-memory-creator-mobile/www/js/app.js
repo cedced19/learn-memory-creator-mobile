@@ -68,9 +68,19 @@
 }).controller('LearnMemoryUpdateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
     $anchorScroll();
 
+    $http.get('http://' + $localStorage.adress + '/api/').success(function (data) {
+        $scope.lessons = data;
+    });
+
     $rootScope.nav = 'update';
 }).controller('LearnMemoryUpdateItemCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $routeParams, $anchorScroll) {
     $anchorScroll();
+
+    $http.get('http://' + $localStorage.adress + '/api/' + $routeParams.id).success(function (data) {
+        $scope.substance = data.substance;
+        $scope.date = data.updatedAt;
+        $scope.text = toMarkdown(data.content);
+    });
 
     document.querySelector('textarea').addEventListener('keyup', function (e) {
         this.style.height = '24px';
