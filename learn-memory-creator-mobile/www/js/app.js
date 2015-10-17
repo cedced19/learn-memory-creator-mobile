@@ -1,5 +1,6 @@
 ﻿angular.module('LearnMemory', ['ngRoute', 'ngStorage', 'ngSanitize', 'ngTouch'])
-.config(['$routeProvider', function ($routeProvider) {
+.config(function ($routeProvider, $httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
     $routeProvider
     .when('/', {
         templateUrl: 'views/home.html',
@@ -24,8 +25,8 @@
     .otherwise({
         redirectTo: '/'
     });
-}])
-.run(['$rootScope', '$location', function ($rootScope, $location) {
+})
+.run(function ($rootScope, $location) {
     $rootScope.$menu = {
         show: function () {
             if ($rootScope.nav != 'home') {
@@ -39,7 +40,18 @@
             }
         }
     };
-}])
+    
+    marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true
+    });
+})
 .controller('LearnMemoryHomeCtrl', function ($scope, $rootScope, $location, $localStorage) {
     $localStorage.$default({
         adress: ''
@@ -63,11 +75,31 @@
 
     $scope.login = false;
 
+    $scope.create = function () {
+        $http.post('http://' + $localStorage.adress + '/login', {
+            name: this.name,
+            password: this.password
+        }).success(function () {
+            $http.post('http://' + $localStorage.adress + '/api', {
+                content: marked($scope.content),
+                substance: $scope.substance
+            }).success(function (data) {
+                navigator.notification.alert('This lesson has just been updated!', null, 'Done', 'Ok');
+                $scope.login = false;
+                $location.path('/update/' + data.id);
+            });
+        })
+        .error(function () {
+            navigator.notification.alert('Access denied!', null, 'Error', 'Ok');
+            navigator.vibrate(500);
+        });
+    };
+
     $('textarea').autoResize();
 }).controller('LearnMemoryUpdateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
     $anchorScroll();
 
-    $http.get('http://' + $localStorage.adress + '/api/').success(function (data) {
+    $http.get('http://' + $localStorage.adress + '/api').success(function (data) {
         $scope.lessons = data;
     });
 
@@ -82,8 +114,26 @@
     $http.get('http://' + $localStorage.adress + '/api/' + $routeParams.id).success(function (data) {
         $scope.substance = data.substance;
         $scope.date = data.updatedAt;
-        $scope.text = toMarkdown(data.content);
+        $scope.content = toMarkdown(data.content);
     });
+
+    $scope.update = function () {
+        $http.post('http://' + $localStorage.adress + '/login', {
+            name: this.name,
+            password: this.password
+        }).success(function () {
+            $http.put('http://' + $localStorage.adress + '/api/' + $routeParams.id, {
+                content: marked($scope.content)
+            }).success(function (data) {
+                navigator.notification.alert('This lesson has just been updated!', null, 'Done', 'Ok');
+                $scope.login = false;
+            });
+        })
+        .error(function () {
+            navigator.notification.alert('Access denied!', null, 'Error', 'Ok');
+            navigator.vibrate(500);
+        });
+    };
 
     $('textarea').autoResize();
 }).controller('LearnMemoryConfigCtrl', function ($scope, $rootScope, $location, $localStorage, $anchorScroll) {

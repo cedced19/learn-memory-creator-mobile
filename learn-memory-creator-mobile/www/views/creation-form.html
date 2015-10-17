@@ -3,17 +3,19 @@
         <h1>Create a lesson</h1>
         <input type="text" class="form-control" placeholder="Substance" ng-model="substance">
         <br>
-        <textarea class="form-control" placeholder="Text (in markdown)" ng-model="text"></textarea>
+        <textarea class="form-control" placeholder="Content (in markdown)" ng-model="content"></textarea>
         <br>
         <button type="button" class="btn btn-success" ng-click="login = true">Create a lesson</button>
     </div>
     <div ng-show="login">
         <h2>Authentication</h2>
-        <input class="form-control" placeholder="Name" mg-model="user.name">
-        <br>
-        <input class="form-control" placeholder="Password" mg-model="user.password">
-        <br>
-        <button type="button" class="btn btn-success" ng-click="update()">Login</button>
-        <button type="button" class="btn btn-default" ng-click="login = false">Back to edition</button>
+        <form ng-submit="create()">
+            <input class="form-control" type="text" placeholder="Name" ng-model="name">
+            <br>
+            <input class="form-control" type="password" placeholder="Password" ng-model="password">
+            <br>
+            <button type="submit" class="btn btn-success">Login</button>
+            <button type="button" class="btn btn-default" ng-click="login = false">Back to edition</button>
+        </form>
     </div>
 </div>
