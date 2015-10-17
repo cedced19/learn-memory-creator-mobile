@@ -59,12 +59,11 @@
 }).controller('LearnMemoryCreateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
     $anchorScroll();
     
-    document.querySelector('textarea').addEventListener('keyup', function (e) {
-        this.style.height = '24px';
-        this.style.height = this.scrollHeight + 12 + 'px';
-    });
-
     $rootScope.nav = 'create';
+
+    $scope.login = false;
+
+    $('textarea').autoResize();
 }).controller('LearnMemoryUpdateCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $anchorScroll) {
     $anchorScroll();
 
@@ -76,18 +75,17 @@
 }).controller('LearnMemoryUpdateItemCtrl', function ($scope, $rootScope, $location, $localStorage, $http, $routeParams, $anchorScroll) {
     $anchorScroll();
 
+    $rootScope.nav = false;
+
+    $scope.login = false;
+
     $http.get('http://' + $localStorage.adress + '/api/' + $routeParams.id).success(function (data) {
         $scope.substance = data.substance;
         $scope.date = data.updatedAt;
         $scope.text = toMarkdown(data.content);
     });
 
-    document.querySelector('textarea').addEventListener('keyup', function (e) {
-        this.style.height = '24px';
-        this.style.height = this.scrollHeight + 12 + 'px';
-    });
-
-    $rootScope.nav = false;
+    $('textarea').autoResize();
 }).controller('LearnMemoryConfigCtrl', function ($scope, $rootScope, $location, $localStorage, $anchorScroll) {
     $anchorScroll();
 
